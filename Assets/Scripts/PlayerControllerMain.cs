@@ -1,8 +1,10 @@
 using UnityEngine;
-//using System.Collections;
+using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerControllerMain : MonoBehaviour
 {
+
     public float speed = 5f;
     public float jumpForce = 5f;
 
@@ -21,10 +23,16 @@ public class PlayerControllerMain : MonoBehaviour
 
     private bool isAttacking = false;
 
+    public int health = 100;
+    public Image healthImage;
+
+    private SpriteRenderer spriteRenderer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -39,6 +47,9 @@ public class PlayerControllerMain : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
            // isGrounded = false;
         }
+
+        healthImage.fillAmount = health / 100f;
+
         SetAnimation(moveInput);
         Flip(moveInput);
         combat();
@@ -104,5 +115,31 @@ public class PlayerControllerMain : MonoBehaviour
     public void EndAttack()
     {
         isAttacking = false;
+    }
+
+   private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Damage")
+        {
+            health -= 25;
+            StartCoroutine(BlinkRed());
+
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
+    }
+
+    private IEnumerator BlinkRed()
+    {
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = Color.white;
+    }
+
+    private void Die()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
     }
 }
