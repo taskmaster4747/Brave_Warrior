@@ -8,6 +8,10 @@ public class Enemy : MonoBehaviour
     private int i;
     private SpriteRenderer spriteRenderer;
 
+    public int health = 50;
+
+    //public LayerMask enemylayer;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -27,5 +31,29 @@ public class Enemy : MonoBehaviour
         transform.position = Vector2.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
 
         spriteRenderer.flipX = (transform.position.x - points[i].position.x) < 0f;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        Debug.Log($"Enemy hit! Health: {health}");
+
+        GetComponent<SpriteRenderer>().color = Color.red;
+        Invoke("ResetColor", 0.1f);
+
+        if(health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void ResetColor()
+    {
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }

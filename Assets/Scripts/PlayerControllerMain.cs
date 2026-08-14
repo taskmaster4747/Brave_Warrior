@@ -23,10 +23,19 @@ public class PlayerControllerMain : MonoBehaviour
 
     private bool isAttacking = false;
 
+    public Transform attackPoint;
+    public float attackrange = 0.5f;
+    public LayerMask enemylayer;
+
     public int health = 100;
     public Image healthImage;
 
+    private float damageTimer = 0f;
+    public float damageInterval = 0.5f; //damage every 0.5 sec
+
     private SpriteRenderer spriteRenderer;
+
+    private bool isDefending = false;
 
     void Start()
     {
@@ -48,6 +57,18 @@ public class PlayerControllerMain : MonoBehaviour
            // isGrounded = false;
         }
 
+        //Defend
+        if (Input.GetMouseButton(1))
+        {
+            isDefending = true;
+            animator.SetBool("Defend", true);
+        }
+        else
+        {
+            isDefending = false;
+            animator.SetBool("Defend", false);
+        }
+
         healthImage.fillAmount = health / 100f;
 
         SetAnimation(moveInput);
@@ -63,7 +84,7 @@ public class PlayerControllerMain : MonoBehaviour
 
     private void SetAnimation(float moveInput)
     {
-        if (isAttacking) return;
+        if (isAttacking || isDefending) return;
 
         if (isGrounded)
         {
@@ -109,6 +130,8 @@ public class PlayerControllerMain : MonoBehaviour
         {
             isAttacking = true;
            animator.SetTrigger("Attack");
+
+            AttackHit();
         }
     }
 
@@ -131,6 +154,41 @@ public class PlayerControllerMain : MonoBehaviour
         }
     }
 
+    void TakeDamage(int damage)
+    {
+        if (isDefending) return;
+
+        health -= damage;
+        StartCoroutine(BlinkRed());
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Damage"))
+        {
+            damageTimer += Time.deltaTime;
+
+            if (damageTimer >= damageInterval)
+            {
+                TakeDamage(10);
+                damageTimer = 0f;
+            }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Damage"))
+        {
+            damageTimer = 0f; //reset when leaving or get off from damage object
+        }
+    }
+
     private IEnumerator BlinkRed()
     {
         spriteRenderer.color = Color.red;
@@ -141,5 +199,19 @@ public class PlayerControllerMain : MonoBehaviour
     private void Die()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
+    }
+
+    void AttackHit()
+    {
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(
+            attackPoint.position,
+            attackrange,
+            enemylayer
+            );
+
+        foreach(Collider2D enemy in enemies)
+        {
+            enemy.GetComponent<Enemy>()?.TakeDamage(20);
+        }
     }
 }
