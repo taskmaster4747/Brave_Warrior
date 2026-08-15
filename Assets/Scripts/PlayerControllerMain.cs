@@ -46,12 +46,9 @@ public class PlayerControllerMain : MonoBehaviour
 
     void Update()
     {
-        float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
-
-
+        
         //jump
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isDefending)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
            // isGrounded = false;
@@ -62,17 +59,28 @@ public class PlayerControllerMain : MonoBehaviour
         {
             isDefending = true;
             animator.SetBool("Defend", true);
+
+            // Stop horizontal movement
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+
         }
         else
         {
             isDefending = false;
             animator.SetBool("Defend", false);
+
+            //normal movement
+            float moveInput = Input.GetAxis("Horizontal");
+            rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
+
+            Flip(moveInput);
+
         }
 
         healthImage.fillAmount = health / 100f;
 
-        SetAnimation(moveInput);
-        Flip(moveInput);
+        SetAnimation(isDefending ? 0 : Input.GetAxis("Horizontal"));
+        //Flip(moveInput);
         combat();
     }
 
