@@ -10,6 +10,9 @@ public class Enemy : MonoBehaviour
 
     public int health = 50;
 
+    public float damageInterval = 0.5f;
+    private float damageTimer = 0f;
+
     //public LayerMask enemylayer;
 
     void Start()
@@ -38,7 +41,8 @@ public class Enemy : MonoBehaviour
         health -= damage;
         Debug.Log($"Enemy hit! Health: {health}");
 
-        GetComponent<SpriteRenderer>().color = Color.red;
+        //GetComponent<SpriteRenderer>().color = Color.red;
+        spriteRenderer.color = Color.red;
         Invoke("ResetColor", 0.1f);
 
         if(health <= 0)
@@ -49,11 +53,38 @@ public class Enemy : MonoBehaviour
 
     void ResetColor()
     {
-        GetComponent<SpriteRenderer>().color = Color.white;
+        // GetComponent<SpriteRenderer>().color = Color.white;
+        spriteRenderer.color = Color.white;
     }
 
     void Die()
     {
         Destroy(gameObject);
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            damageTimer += Time.deltaTime;
+
+            if(damageTimer >= damageInterval)
+            {
+                collision.gameObject
+                    .GetComponent<PlayerControllerMain>()
+                    ?.TakeDamage(10);
+
+                damageTimer = 0f;
+            }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            damageTimer = 0f;
+        }
+    }
+
 }
