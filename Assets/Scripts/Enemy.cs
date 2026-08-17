@@ -13,14 +13,17 @@ public class Enemy : MonoBehaviour
     public float damageInterval = 0.5f;
     private float damageTimer = 0f;
 
+    private Rigidbody2D rb;
+
     //public LayerMask enemylayer;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if(Vector2.Distance(transform.position, points[i].position) < 0.25f)
         {
@@ -31,7 +34,10 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
+        //transform.position = Vector2.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
+
+        Vector2 newPosition = Vector2.MoveTowards(rb.position, points[i].position, speed * Time.fixedDeltaTime);
+        rb.MovePosition(newPosition);
 
         spriteRenderer.flipX = (transform.position.x - points[i].position.x) < 0f;
     }
@@ -66,14 +72,16 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            damageTimer += Time.deltaTime;
+            damageTimer += Time.fixedDeltaTime;
 
             if(damageTimer >= damageInterval)
             {
-                collision.gameObject
-                    .GetComponent<PlayerControllerMain>()
-                    ?.TakeDamage(10);
+                PlayerControllerMain player = collision.gameObject.GetComponent<PlayerControllerMain>();
 
+                if (player != null)
+                {
+                    player.TakeDamage(10);
+                }
                 damageTimer = 0f;
             }
         }

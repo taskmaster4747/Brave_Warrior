@@ -29,8 +29,9 @@ public class PlayerControllerMain : MonoBehaviour
 
     public int health = 100;
     public Image healthImage;
+    public float fallLimit = -10f;
 
-    private float damageTimer = 0f;
+    //private float damageTimer = 0f;
     public float damageInterval = 0.5f; //damage every 0.5 sec
 
     private SpriteRenderer spriteRenderer;
@@ -75,6 +76,12 @@ public class PlayerControllerMain : MonoBehaviour
 
             Flip(moveInput);
 
+        }
+
+        //Fall Death
+        if(transform.position.y < fallLimit)
+        {
+            Die();
         }
 
         healthImage.fillAmount = health / 100f;
@@ -147,7 +154,7 @@ public class PlayerControllerMain : MonoBehaviour
     {
         isAttacking = false;
     }
-
+    /*
    private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Damage")
@@ -161,6 +168,7 @@ public class PlayerControllerMain : MonoBehaviour
             }
         }
     }
+    */
 
    public void TakeDamage(int damage)
     {
@@ -175,6 +183,7 @@ public class PlayerControllerMain : MonoBehaviour
         }
     }
 
+    /*
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Damage"))
@@ -188,6 +197,7 @@ public class PlayerControllerMain : MonoBehaviour
             }
         }
     }
+   
 
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -196,6 +206,8 @@ public class PlayerControllerMain : MonoBehaviour
             damageTimer = 0f; //reset when leaving or get off from damage object
         }
     }
+
+     */
 
     private IEnumerator BlinkRed()
     {
@@ -222,4 +234,13 @@ public class PlayerControllerMain : MonoBehaviour
             enemy.GetComponent<Enemy>()?.TakeDamage(20);
         }
     }
+    /*
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("DeathZone"))
+        {
+            Die();
+        }
+    }
+    */
 }
