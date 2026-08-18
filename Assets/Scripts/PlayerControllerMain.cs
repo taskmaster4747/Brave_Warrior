@@ -218,7 +218,7 @@ public class PlayerControllerMain : MonoBehaviour
 
     private void Die()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 
     void AttackHit()

@@ -2894,7 +2894,7 @@ GameObject:
   - component: {fileID: 868416353}
   - component: {fileID: 868416356}
   m_Layer: 5
-  m_Name: ReStartButton
+  m_Name: Next Level Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2965,8 +2965,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 868416356}
-        m_TargetAssemblyTypeName: ReStartGame, Assembly-CSharp
-        m_MethodName: LoadCurrentScene
+        m_TargetAssemblyTypeName: NextLevel, Assembly-CSharp
+        m_MethodName: LoadNextLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3023,9 +3023,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 868416351}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c64619a98efe5346ad755e558afc33a, type: 3}
+  m_Script: {fileID: 11500000, guid: 27637fc436e8777449c2912657c1bb1e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ReStartGame
+  m_EditorClassIdentifier: Assembly-CSharp::NextLevel
+  nextLevelName: Level2
 --- !u!1 &998658583
 GameObject:
   m_ObjectHideFlags: 0
@@ -3197,7 +3198,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 0.8862405, y: 0.8862399}
-  m_EdgeRadius: 0
+  m_EdgeRadius: 0.1
 --- !u!50 &1039674417
 Rigidbody2D:
   serializedVersion: 5
@@ -3264,7 +3265,7 @@ MonoBehaviour:
   - {fileID: 1469331592}
   - {fileID: 152725655}
   health: 50
-  damageInterval: 0.5
+  damageInterval: 0.2
 --- !u!1 &1065696125
 GameObject:
   m_ObjectHideFlags: 0
@@ -3386,7 +3387,7 @@ MonoBehaviour:
   - {fileID: 81291926}
   - {fileID: 1685789941}
   health: 50
-  damageInterval: 0.5
+  damageInterval: 0
 --- !u!95 &1205010475
 Animator:
   serializedVersion: 7
@@ -3751,7 +3752,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ReStart
+  m_text: Next Level
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3884,7 +3885,7 @@ MonoBehaviour:
   - {fileID: 1956644278}
   - {fileID: 1164909148}
   health: 50
-  damageInterval: 0.5
+  damageInterval: 0.1
 --- !u!95 &1327567763
 Animator:
   serializedVersion: 7
