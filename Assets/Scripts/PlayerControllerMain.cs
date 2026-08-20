@@ -154,7 +154,8 @@ public class PlayerControllerMain : MonoBehaviour
     {
         isAttacking = false;
     }
-    /*
+    
+    //Damage
    private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Damage")
@@ -168,7 +169,7 @@ public class PlayerControllerMain : MonoBehaviour
             }
         }
     }
-    */
+    
 
    public void TakeDamage(int damage)
     {
