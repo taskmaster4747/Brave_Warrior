@@ -26,10 +26,19 @@ public class PlayerControllerMain : MonoBehaviour
     public Transform attackPoint;
     public float attackrange = 0.5f;
     public LayerMask enemylayer;
+    
+
 
     public int health = 100;
     public Image healthImage;
     public float fallLimit = -10f;
+
+    private AudioSource audioSource;
+
+    public AudioClip jumpClip;
+    public AudioClip hurtClip;
+    public AudioClip AttackClip;
+    public AudioClip BlockClip;
 
     //private float damageTimer = 0f;
     public float damageInterval = 0.5f; //damage every 0.5 sec
@@ -43,6 +52,7 @@ public class PlayerControllerMain : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -52,7 +62,8 @@ public class PlayerControllerMain : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isDefending)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-           // isGrounded = false;
+            // isGrounded = false;
+            PlaySFX(jumpClip);
         }
 
         //Defend
@@ -60,7 +71,7 @@ public class PlayerControllerMain : MonoBehaviour
         {
             isDefending = true;
             animator.SetBool("Defend", true);
-
+           
             // Stop horizontal movement
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
@@ -69,6 +80,7 @@ public class PlayerControllerMain : MonoBehaviour
         {
             isDefending = false;
             animator.SetBool("Defend", false);
+          //  PlaySFX(BlockClip);
 
             //normal movement
             float moveInput = Input.GetAxis("Horizontal");
@@ -141,11 +153,11 @@ public class PlayerControllerMain : MonoBehaviour
 
     void combat()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
             isAttacking = true;
            animator.SetTrigger("Attack");
-
+            PlaySFX(AttackClip);
             AttackHit();
         }
     }
@@ -160,6 +172,7 @@ public class PlayerControllerMain : MonoBehaviour
     {
         if(collision.gameObject.tag == "Damage")
         {
+            PlaySFX(hurtClip);
             health -= 25;
             StartCoroutine(BlinkRed());
 
@@ -244,4 +257,10 @@ public class PlayerControllerMain : MonoBehaviour
         }
     }
     */
+
+    private void PlaySFX(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        audioSource.Play();
+    }
 }
