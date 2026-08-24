@@ -1494,7 +1494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b0e04d5fc478748a2f0f24ce6eb990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Flag
-  winUI: {fileID: 0}
+  winUI: {fileID: 1360077066}
 --- !u!61 &744108002
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7354,6 +7354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NextLevel
   nextLevelName: Level3
+  nextLevelValue: 3
 --- !u!114 &1762664178
 MonoBehaviour:
   m_ObjectHideFlags: 0
