@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PauseManu : MonoBehaviour
+public class PauseMenu : MonoBehaviour
 {
     public GameObject container;
     
@@ -21,6 +21,6 @@ public class PauseManu : MonoBehaviour
 
     public void MainMenuButton()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Manu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
     }
 }
