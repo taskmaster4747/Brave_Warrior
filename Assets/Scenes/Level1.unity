@@ -346,7 +346,7 @@ Transform:
   m_GameObject: {fileID: 152725654}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.85, y: -1.31, z: 0}
+  m_LocalPosition: {x: 3.85, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -821,6 +821,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &635027905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 635027906}
+  m_Layer: 0
+  m_Name: BulletPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &635027906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635027905}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.30183983, y: -0.011000007, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1039674414}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &687679811
 GameObject:
@@ -3708,7 +3739,8 @@ GameObject:
   - component: {fileID: 1039674417}
   - component: {fileID: 1039674416}
   - component: {fileID: 1039674418}
-  - component: {fileID: 1039674419}
+  - component: {fileID: 1039674420}
+  - component: {fileID: 1039674421}
   m_Layer: 7
   m_Name: ActualEnemy
   m_TagString: Enemy
@@ -3725,10 +3757,11 @@ Transform:
   m_GameObject: {fileID: 1039674413}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.0036798, y: -1.28529, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1.0036798, y: -0.84, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 635027906}
   m_Father: {fileID: 1962714299}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1039674415
@@ -3885,7 +3918,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1039674419
+--- !u!114 &1039674420
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3894,15 +3927,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 1039674413}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f23fbbcaffa827641ae7d7ad006e9c46, type: 3}
+  m_Script: {fileID: 11500000, guid: b93d0e5159d74f9479b867fc032f8a1b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  speed: 1
+  m_EditorClassIdentifier: Assembly-CSharp::Shooting
+  bullet: {fileID: 1674819069819680863, guid: 8fcbfca41e48ad440b72c21ddb078092, type: 3}
+  bulletPos: {fileID: 635027906}
+--- !u!114 &1039674421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039674413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b08c0b5bf93904f929763dea5667f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingEnemy
+  speed: 2
   points:
   - {fileID: 1469331592}
   - {fileID: 152725655}
   health: 50
-  damageInterval: 0.2
 --- !u!1 &1041872399
 GameObject:
   m_ObjectHideFlags: 0
@@ -4328,7 +4374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1215126830
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4916,7 +4962,7 @@ Transform:
   m_GameObject: {fileID: 1469331591}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.55, y: -1.31, z: 0}
+  m_LocalPosition: {x: -1.55, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

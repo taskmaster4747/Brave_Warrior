@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -26,7 +26,7 @@ public class PlayerControllerMain : MonoBehaviour
     public Transform attackPoint;
     public float attackrange = 0.5f;
     public LayerMask enemylayer;
-    
+
 
 
     public int health = 100;
@@ -40,8 +40,10 @@ public class PlayerControllerMain : MonoBehaviour
     public AudioClip AttackClip;
     public AudioClip BlockClip;
 
-    //private float damageTimer = 0f;
-    public float damageInterval = 0.5f; //damage every 0.5 sec
+    private bool blockSoundPlayed = false;
+
+    private float damageTimer = 0f;
+    public float damageInterval = 0f; //damage every fps/sec
 
     private SpriteRenderer spriteRenderer;
 
@@ -57,7 +59,7 @@ public class PlayerControllerMain : MonoBehaviour
 
     void Update()
     {
-        
+
         //jump
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isDefending)
         {
@@ -66,21 +68,38 @@ public class PlayerControllerMain : MonoBehaviour
             PlaySFX(jumpClip);
         }
 
+       
+
         //Defend
         if (Input.GetMouseButton(1))
         {
-            isDefending = true;
-            animator.SetBool("Defend", true);
-           
+            if (!isDefending)
+            {
+                isDefending = true;
+                animator.SetBool("Defend", true);
+
+                PlaySFX(BlockClip);
+                blockSoundPlayed = true;
+
+                Debug.Log("Block");
+            }
+
             // Stop horizontal movement
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+           rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         }
+        else if (Input.GetMouseButtonUp(1))
+        {
+            isDefending = false;
+            animator.SetBool("Defend", false);
+            blockSoundPlayed = false;
+        }
+       
         else
         {
             isDefending = false;
             animator.SetBool("Defend", false);
-          //  PlaySFX(BlockClip);
+            blockSoundPlayed = false;
 
             //normal movement
             float moveInput = Input.GetAxis("Horizontal");
@@ -91,7 +110,7 @@ public class PlayerControllerMain : MonoBehaviour
         }
 
         //Fall Death
-        if(transform.position.y < fallLimit)
+        if (transform.position.y < fallLimit)
         {
             Die();
         }
@@ -126,9 +145,10 @@ public class PlayerControllerMain : MonoBehaviour
         }
         else
         {
-            if(rb.linearVelocity.y > 0)
+            if (rb.linearVelocity.y > 0)
             {
                 animator.Play("Jump");
+               // PlaySFX(jumpClip);
             }
             else
             {
@@ -139,7 +159,7 @@ public class PlayerControllerMain : MonoBehaviour
 
     void Flip(float moveInput)
     {
-        if(moveInput > 0 && !facingRight)
+        if (moveInput > 0 && !facingRight)
         {
             facingRight = true;
             transform.localScale = new Vector3(1, 1, 1);
@@ -153,24 +173,27 @@ public class PlayerControllerMain : MonoBehaviour
 
     void combat()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !isDefending)
         {
             isAttacking = true;
-           animator.SetTrigger("Attack");
+            animator.SetTrigger("Attack");
             PlaySFX(AttackClip);
             AttackHit();
         }
+        
     }
 
     public void EndAttack()
     {
         isAttacking = false;
+
+        animator.ResetTrigger("Attack");
     }
-    
+
     //Damage
-   private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Damage")
+        if (collision.gameObject.tag == "Damage")
         {
             PlaySFX(hurtClip);
             health -= 25;
@@ -182,9 +205,9 @@ public class PlayerControllerMain : MonoBehaviour
             }
         }
     }
-    
+   
 
-   public void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         if (isDefending) return;
 
@@ -197,16 +220,20 @@ public class PlayerControllerMain : MonoBehaviour
         }
     }
 
-    /*
+    //
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Damage"))
         {
             damageTimer += Time.deltaTime;
 
+           
+
             if (damageTimer >= damageInterval)
             {
-                TakeDamage(10);
+                PlaySFX(hurtClip);
+                StartCoroutine(BlinkRed());
+                TakeDamage(6);
                 damageTimer = 0f;
             }
         }
@@ -221,7 +248,7 @@ public class PlayerControllerMain : MonoBehaviour
         }
     }
 
-     */
+    //
 
     private IEnumerator BlinkRed()
     {
@@ -243,9 +270,9 @@ public class PlayerControllerMain : MonoBehaviour
             enemylayer
             );
 
-        foreach(Collider2D enemy in enemies)
+        foreach (Collider2D enemy in enemies)
         {
-            enemy.GetComponent<Enemy>()?.TakeDamage(20);
+            enemy.GetComponent<ShootingEnemy>()?.TakeDamage(20);
         }
     }
     /*
@@ -260,7 +287,7 @@ public class PlayerControllerMain : MonoBehaviour
 
     private void PlaySFX(AudioClip audioClip)
     {
-        audioSource.clip = audioClip;
-        audioSource.Play();
+       // audioSource.clip = audioClip;
+        audioSource.PlayOneShot(audioClip);
     }
 }
